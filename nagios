@@ -1,0 +1,104 @@
+
+change hostname
+
+set static ip
+
+set timezone
+
+ sudo dpkg-reconfigure tzdata
+
+ sudo apt-get install -y apache2 apache2-utils autoconf gcc libc6 libgd-dev make php python python3 unzip wget tree
+
+     cd /tmp/
+
+     wget http://192.168.1.251/sw/nagios/nagios-4.4.5.tar.gz
+
+     tar -zxf nagios-4.4.5.tar.gz
+
+     cd nagios-4.4.5
+
+    sudo ./configure --with-httpd-conf=/etc/apache2/sites-enabled/
+
+     sudo make all
+
+     sudo make install-groups-users
+
+     sudo passwd nagios
+
+     sudo usermod -a -G nagios www-data
+
+     sudo make install
+
+     sudo make install-daemoninit
+
+     sudo make install-commandmode
+
+     sudo make install-config
+
+     sudo make install-webconf
+
+     sudo a2enmod rewrite
+
+     sudo a2enmod cgi
+
+     sudo htpasswd -c /usr/local/nagios/etc/htpasswd.users nagiosadmin
+
+testing -  sudo /usr/local/nagios/bin/nagios -v /usr/local/nagios/etc/nagios.cfg
+
+     sudo systemctl restart apache2.service
+
+    sudo systemctl restart nagios.service
+
+    ip a(check in browser - ip/nagios)
+
+    cd
+
+    sudo apt-get install -y automake autotools-dev bc build-essential dc gawk gettext libmcrypt-dev libnet-snmp-perl libssl-dev snmp
+
+    cd /tmp/
+
+     wget http://192.168.1.251/sw/nagios/nagios-plugins-release-2.2.1.tar.gz
+
+     tar -zxf nagios-plugins-2.2.1.tar.gz
+
+     cd nagios-plugins-2.2.1
+
+     sudo ./tools/setup
+
+     sudo ./configure
+
+     sudo make
+
+    sudo make install
+
+check plugins in ls -l /usr/local/nagios/libexec/
+
+cd /usr/local/nagios/libexec/
+
+wget <plugin ncpa.py>  http://192.168.1.251/sw/nagios/check_ncpa.py
+
+sudo chmod 777 /usr/local/nagios/libexec/check_ncpa.py
+
+sudo ./check_ncpa.py -V 
+
+sudo ./check_ncpa.py -t pass123 (windows/linux token) -H (win client ip/linux client ip) -M memory/virtual
+
+go to /usr/local/nagios/etc/objects
+
+sudo nano commands.cfg
+
+define command {
+
+    command_name    check_ncpa
+
+    command_line    $USER1$/check_ncpa.py -H $HOSTADDRESS$ $ARG1$
+
+}
+
+------------For windows client:
+
+install ncpa in windows machine and give Token when prompted
+
+GOTO  /usr/local/nagios/etc/nagios.cfg
+
+uncomment cfg_dir=/usr/local/nagios/etc/servers
